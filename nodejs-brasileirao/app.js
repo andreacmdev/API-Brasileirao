@@ -24,13 +24,24 @@ app.get('/:sigla', (requisicao, resposta) => {
 app.put('/:sigla', (req, res) => {
     const siglaInformada = req.params.sigla.toUpperCase();
     const timeSelecionado = tabela2024.find((t) => t.sigla === siglaInformada);
-    console.log(req.body);
     const campos = Object.keys(req.body);
     for (let campo of campos) {
-       timeSelecionado[campo] = req.body[campo]
+        timeSelecionado[campo] = req.body[campo]
     }
     res.status(200).send(timeSelecionado);
+});
 
+app.post('/', (req, res) => {
+    const novoTime = req.body;
+    tabela2024.push(novoTime);
+    res.status(200).send(novoTime);
+});
+
+app.delete('/:sigla', (req, res) => {
+    const siglaInformada = req.params.sigla.toUpperCase();
+    const indiceTimeSelecionado = tabela2024.findIndex((t) => t.sigla === siglaInformada);
+    const timeRemovido = tabela2024.splice(indiceTimeSelecionado, 1); //splice remove elemento indicado
+    res.status(200).send(timeRemovido);
 })
 
 app.listen(300, () => console.log('servidor rodando com sucesso'));
