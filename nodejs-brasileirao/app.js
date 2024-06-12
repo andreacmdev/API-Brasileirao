@@ -24,6 +24,10 @@ app.get('/:sigla', (requisicao, resposta) => {
 app.put('/:sigla', (req, res) => {
     const siglaInformada = req.params.sigla.toUpperCase();
     const timeSelecionado = tabela2024.find((t) => t.sigla === siglaInformada);
+    if (!timeSelecionado) {
+        res.status(404).send('Não existe na Séria A do brasileirão um time com a sigla informada');
+        return;
+    }
     const campos = Object.keys(req.body);
     for (let campo of campos) {
         timeSelecionado[campo] = req.body[campo]
@@ -40,6 +44,10 @@ app.post('/', (req, res) => {
 app.delete('/:sigla', (req, res) => {
     const siglaInformada = req.params.sigla.toUpperCase();
     const indiceTimeSelecionado = tabela2024.findIndex((t) => t.sigla === siglaInformada);
+    if (indiceTimeSelecionado === -1) {
+        res.status(404).send('Não existe na Séria A do brasileirão um time com a sigla informada');
+        return;
+    }
     const timeRemovido = tabela2024.splice(indiceTimeSelecionado, 1); //splice remove elemento indicado
     res.status(200).send(timeRemovido);
 })
